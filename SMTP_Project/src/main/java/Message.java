@@ -1,3 +1,5 @@
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.text.*;
 
@@ -18,6 +20,8 @@ public class Message {
     private String From;
     private String To;
 
+    private String contentEncodeing;
+
     /* To make it look nicer */
     private static final String CRLF = "\r\n";
 
@@ -30,6 +34,7 @@ public class Message {
         Headers = "From: " + From + CRLF;
         Headers += "To: " + To + CRLF;
         Headers += "Subject: " + subject.trim() + CRLF;
+        Headers += "Content-Transfer-Encoding: base64";
 
 	/* A close approximation of the required format. Unfortunately
 	   only GMT. */
@@ -72,6 +77,18 @@ public class Message {
             return false;
         }
         return true;
+    }
+
+    public String imageToHex(Path path){
+        StringBuilder contentHeader =  new StringBuilder("Content-Type: text/pdf; name=\"file.pdf\" \n\r" +
+                                "Content-Transfer-Encoding: base64\n" +
+                                "\nContent-Disposition: attachment; filename=\"file.pdf\" \n\r")
+        if(Files.notExists(path)){
+            throw new IllegalArgumentException();
+        }
+        contentH
+
+        return ;
     }
 
     /* For printing the message. */
