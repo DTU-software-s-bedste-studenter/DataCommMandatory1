@@ -1,7 +1,5 @@
-import javax.imageio.ImageIO;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 import java.text.*;
 
@@ -22,7 +20,12 @@ public class Message {
     private String From;
     private String To;
 
-    private String base64encoded =  Base64.getMimeEncoder().encodeToString((System.getProperty("user.dir") + "\\resources\\amazed-man.jpg").getBytes());
+    private File image;
+    private String base64encoded;
+
+    //File f = new File(System.getProperty("/Users/matt/IdeaProjects/DataCommMandatory1/SMTP_Project/src/resources/amazed-man.jpg"));
+
+
 
     /* To make it look nicer */
     private static final String CRLF = "\r\n";
@@ -39,14 +42,46 @@ public class Message {
         Headers += "MIME-Version: 1.0" + CRLF;
         Headers += "Content-Type:multipart/mixed;boundary=-x-x-x-x-x-" + CRLF;
         Headers += "Content-Transfer-Encoding: base64" + CRLF;
-
+        String imageHeader = "--X-=-=-=-text boundary" + CRLF + "Content-Type: image/jpeg; name=amazed-man.jpg" + CRLF + "Content-Transfer-Encoding: base64" + CRLF + "Content-Disposition: attachment; filename=amazed-man.jpg";
 	/* A close approximation of the required format. Unfortunately
 	   only GMT. */
         SimpleDateFormat format =
                 new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss 'GMT'");
         String dateString = format.format(new Date());
+        /*try {
+            //FileInputStream fin = new FileInputStream(f);
+            byte imagebytearray[] = new byte[(int) f.length()];
+            fin.read(imagebytearray);
+            String imagetobase64 = Base64.getEncoder().encodeToString(imagebytearray);
+            fin.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+         */
+
+
+        //https://stackoverflow.com/questions/20389255/reading-a-resource-file-from-within-jar
+        try (InputStream in = getClass().getResourceAsStream("amazed-man.jpg");
+             BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+
+
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+        this.image = new File(System.getProperty("user.dir") + File.separator + "resources" + File.separator + "amazed-man.jpg");
+
+        try {
+            this.base64encoded = Base64.getEncoder().encodeToString(Files.readAllBytes(image.toPath()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Headers += "Date: " + dateString + CRLF;
         Body = text + CRLF;
+        Body += imageHeader + CRLF;
         Body += base64encoded;
     }
 
