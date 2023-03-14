@@ -22,7 +22,7 @@ public class Message {
     private String From;
     private String To;
 
-    private String base64encoded =  Base64.getEncoder().encodeToString((System.getProperty("user.dir") + "\\resources\\amazed-man.jpg").getBytes());
+    private String base64encoded =  Base64.getMimeEncoder().encodeToString((System.getProperty("user.dir") + "\\resources\\amazed-man.jpg").getBytes());
 
     /* To make it look nicer */
     private static final String CRLF = "\r\n";
