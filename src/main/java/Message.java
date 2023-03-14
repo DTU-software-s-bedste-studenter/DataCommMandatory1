@@ -40,9 +40,10 @@ public class Message {
         Headers += "To: " + To + CRLF;
         Headers += "Subject: " + subject.trim() + CRLF;
         Headers += "MIME-Version: 1.0" + CRLF;
-        Headers += "Content-Type:multipart/mixed;boundary=-x-x-x-x-x-" + CRLF;
-        Headers += "Content-Transfer-Encoding: base64" + CRLF;
-        String imageHeader = "--X-=-=-=-text boundary" + CRLF + "Content-Type: image/jpeg; name=amazed-man.jpg" + CRLF + "Content-Transfer-Encoding: base64" + CRLF + "Content-Disposition: attachment; filename=amazed-man.jpg";
+        Headers += "Content-Type:multipart/mixed;boundary=boundary" + CRLF;
+        String imageHeader = "Content-Type: image/jpeg; name=amazed-man.jpg" + CRLF +
+                "Content-Transfer-Encoding: base64" + CRLF +
+                "Content-Disposition: attachment; filename=amazed-man.jpg";
 	/* A close approximation of the required format. Unfortunately
 	   only GMT. */
         SimpleDateFormat format =
@@ -64,15 +65,15 @@ public class Message {
 
 
         //https://stackoverflow.com/questions/20389255/reading-a-resource-file-from-within-jar
-        try (InputStream in = getClass().getResourceAsStream("amazed-man.jpg");
-             BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+        // try (InputStream in = getClass().getResourceAsStream("amazed-man.jpg");
+        //      BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
 
 
-        } catch (IOException e){
-            e.printStackTrace();
-        }
+        // } catch (IOException e){
+        //     e.printStackTrace();
+        // }
 
-        this.image = new File(System.getProperty("user.dir") + File.separator + "resources" + File.separator + "amazed-man.jpg");
+        this.image = new File(System.getProperty("user.dir") + File.separator + "SMTP_Project" + File.separator + "src" + File.separator + "resources" + File.separator + "amazed-man.jpg");
 
         try {
             this.base64encoded = Base64.getEncoder().encodeToString(Files.readAllBytes(image.toPath()));
@@ -80,9 +81,13 @@ public class Message {
             e.printStackTrace();
         }
         Headers += "Date: " + dateString + CRLF;
-        Body = text + CRLF;
-        Body += imageHeader + CRLF;
-        Body += base64encoded;
+        Body = "--boundary" + CRLF;
+        Body += "Content-Type: text/plain;" + CRLF + CRLF;
+        Body += text + CRLF + CRLF;
+        Body += "--boundary" + CRLF;
+        Body += imageHeader + CRLF + CRLF;
+        Body += base64encoded + CRLF + CRLF;
+        Body += "--boundary--";
     }
 
     /* Two functions to access the sender and recipient. */
