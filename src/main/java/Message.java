@@ -23,10 +23,6 @@ public class Message {
     private File image;
     private String base64encoded;
 
-    //File f = new File(System.getProperty("/Users/matt/IdeaProjects/DataCommMandatory1/SMTP_Project/src/resources/amazed-man.jpg"));
-
-
-
     /* To make it look nicer */
     private static final String CRLF = "\r\n";
 
@@ -49,29 +45,6 @@ public class Message {
         SimpleDateFormat format =
                 new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss 'GMT'");
         String dateString = format.format(new Date());
-        /*try {
-            //FileInputStream fin = new FileInputStream(f);
-            byte imagebytearray[] = new byte[(int) f.length()];
-            fin.read(imagebytearray);
-            String imagetobase64 = Base64.getEncoder().encodeToString(imagebytearray);
-            fin.close();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-         */
-
-
-        //https://stackoverflow.com/questions/20389255/reading-a-resource-file-from-within-jar
-        // try (InputStream in = getClass().getResourceAsStream("amazed-man.jpg");
-        //      BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
-
-
-        // } catch (IOException e){
-        //     e.printStackTrace();
-        // }
 
         this.image = new File(System.getProperty("user.dir") + File.separator + "SMTP_Project" + File.separator + "src" + File.separator + "resources" + File.separator + "amazed-man.jpg");
 
